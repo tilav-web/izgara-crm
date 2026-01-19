@@ -1,0 +1,38 @@
+{
+  "pages": {
+    "auth": {
+      "login": {
+        "title": "Telefon raqamingizni kiriting",
+        "description": "OTP kodni olish uchun telefon raqamingizni kiriting",
+        "phone_label": "Telefon raqami",
+        "phone_info": "Format: +998 XX XXX XX XX",
+        "submit_button": "OTP kodni olish"
+      },
+      "otp": {
+        "title": "Kod yubordik uni kiriting!",
+        "description": "Raqamingizga 4 xonali kod yubordik.",
+        "expire_in": "Kodning amal qilish muddati 00:59",
+        "submit_button": "Kodni tasdiqlash",
+        "resend_text": "Kodni olmadingizmi?",
+        "resend_button": "Qayta yuborish"
+      }
+    }
+  },
+  "notification": {
+    "errors": {
+      "hooks": {
+        "auth": {
+          "useLogin": {
+            "phone_empty": "Telefon raqam kiritilishi shart!",
+            "phone_failed": "Telefon raqam to'g'ri formatda kiriting!"
+          },
+          "useOtp": {
+            "session_not_found": "Sessiya topilmadi!",
+            "code_not_found": "Kod topilmadi!"
+          }
+        }
+      }
+    },
+    "successes": {}
+  }
+}
