@@ -9,5 +9,8 @@ export const API_ENDPOINTS = {
         otp: "/accounts/verification/",
         profile: "/accounts/get_my_profile/",
         refresh_token: "/accounts/refresh-token/"
+    },
+    CATEGORY: {
+        findALl: "/products/get_all_category/"
     }
 }

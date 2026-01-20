@@ -1,29 +1,26 @@
-import $api from "@/lib/api-instance";
+import type { IUser } from "@/interfaces/user.interface";
 import { API_ENDPOINTS } from "@/shared/constants";
+import { BaseService } from "../base.service";
 
-class AuthService {
-    async login(phone: string) {
-        const data: {
-            session_id: string,
-            code: string,
-            message: string
-        } = await $api.post(API_ENDPOINTS.AUTH.login, { phone })
-        return data
-    }
-    async otpConfirmation({ session_id, code }: { session_id: string; code: string }) {
-        const data: {
-            access_token: string;
-            refresh_token: string;
-        } = await $api.post(API_ENDPOINTS.AUTH.otp, {
-            session_id,
-            code
-        })
-        return data
-    }
-    async getProfile() {
-        const data = await $api.get(API_ENDPOINTS.AUTH.profile)
-        return data
-    }
+class AuthService extends BaseService {
+  async login(phone: string) {
+    return this.POST<{
+      session_id: string,
+      code: string,
+      message: string
+    }>(API_ENDPOINTS.AUTH.login, { phone })
+  }
+
+  async otpConfirmation({ session_id, code }: { session_id: string; code: string }) {
+    return this.POST<{
+      access_token: string;
+      refresh_token: string;
+    }>(API_ENDPOINTS.AUTH.otp, { session_id, code })
+  }
+  
+  async getProfile() {
+    return this.GET<IUser>(API_ENDPOINTS.AUTH.profile)
+  }
 }
 
 export const authService = new AuthService();
