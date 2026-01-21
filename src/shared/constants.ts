@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
         refresh_token: "/accounts/refresh-token/"
     },
     CATEGORY: {
-        findALl: "/products/get_all_category/"
+        findALl: "/products/get_all_category/",
+        create: "/products/add_category/"
     }
 }

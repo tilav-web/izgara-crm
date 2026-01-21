@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function useFindAllCategory() {
     return useQuery({
-        queryKey: ['category'],
-        queryFn: categoryService.getAllCategory,
+        queryKey: ['categories'],
+        queryFn: async () => categoryService.findAll(),
         staleTime: 1000 * 60 * 5
     })
 }
