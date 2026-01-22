@@ -2,12 +2,21 @@ import useFindAllCategory from "@/hooks/product/category/use-find-all-category";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link, useSearchParams } from "react-router-dom";
 import { cn } from "@/lib/utils"; // Shadcn-ui utility (yoki oddiy classnames)
-import AddCategoryDialog from "./add-category-dialog";
+import CategoryFormDialog from "./category-form-dialog";
 import CategoryItem from "./category-item";
+import { useReducer } from "react";
+import {
+  CategoryFormInitialState,
+  categoryFormReducer,
+} from "@/reducers/products/category.reducer";
 
 export default function CategoryList() {
   const { data: categories, isLoading, error } = useFindAllCategory();
   const [searchParams] = useSearchParams();
+  const [categoryState, categoryDispatch] = useReducer(
+    categoryFormReducer,
+    CategoryFormInitialState,
+  );
 
   // URL dan hozirgi kategoriya ID sini olamiz
   const activeCategoryId = searchParams.get("category");
@@ -73,9 +82,15 @@ export default function CategoryList() {
 
       {/* Kategoriyalar */}
       {categories.map((category) => {
-        return <CategoryItem category={category} />;
+        return (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            dispatch={categoryDispatch}
+          />
+        );
       })}
-      <AddCategoryDialog />
+      <CategoryFormDialog state={categoryState} dispatch={categoryDispatch} />
     </div>
   );
 }

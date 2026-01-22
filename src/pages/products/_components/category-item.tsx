@@ -4,18 +4,24 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import useCategoryAction from "@/hooks/product/category/use-category-action";
 import type { ICategory } from "@/interfaces/product/category.interface";
 import { cn } from "@/lib/utils";
+import { type CategoryFormAction } from "@/reducers/products/category.reducer";
 import { baseURL } from "@/shared/constants";
 import { Edit, Trash } from "lucide-react";
+import { type Dispatch } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-export default function CategoryItem({ category }: { category: ICategory }) {
+export default function CategoryItem({
+  category,
+  dispatch,
+}: {
+  category: ICategory;
+  dispatch: Dispatch<CategoryFormAction>;
+}) {
   const [searchParams] = useSearchParams();
   const activeCategoryId = searchParams.get("category");
   const isActive = activeCategoryId === String(category.id);
-  const { handleOpenDialog } = useCategoryAction();
 
   return (
     <ContextMenu>
@@ -66,7 +72,15 @@ export default function CategoryItem({ category }: { category: ICategory }) {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem
-          onClick={() => handleOpenDialog({ bool: true, id: category.id })}
+          onClick={() => {
+            dispatch({ type: "TOGGLE_DIALOG", value: true });
+            dispatch({ type: "UPDATE_FEILD", field: "id", value: category.id });
+            dispatch({
+              type: "UPDATE_FEILD",
+              field: "name",
+              value: category.name,
+            });
+          }}
           className="flex items-center justify-between cursor-pointer"
         >
           Edit <Edit />

@@ -1,10 +1,8 @@
 
-
-
 export type CategoryFormState = {
-    id: number | null
-    name: string | null
-    image: File | null
+    id: number | undefined
+    name: string
+    image: File | undefined
     dialog_open: boolean
 }
 
@@ -20,6 +18,12 @@ export type CategoryFormAction = {
     payload: Partial<CategoryFormState>
 }
 
+export const CategoryFormInitialState: CategoryFormState = {
+    id: undefined,
+    name: '',
+    image: undefined,
+    dialog_open: false
+}
 
 export const categoryFormReducer = (state: CategoryFormState, action: CategoryFormAction) => {
     switch (action.type) {

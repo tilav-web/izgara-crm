@@ -10,27 +10,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import useCategoryAction from "@/hooks/product/category/use-category-action";
+import {
+  type CategoryFormAction,
+  type CategoryFormState,
+} from "@/reducers/products/category.reducer";
 import { Upload, X, Tag, Image as ImageIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, type Dispatch } from "react";
 
-export default function AddCategoryDialog() {
+export default function CategoryFormDialog({
+  state,
+  dispatch,
+}: {
+  state: CategoryFormState;
+  dispatch: Dispatch<CategoryFormAction>;
+}) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const {
-    handleOpenDialog,
-    isPending,
-    handleSubmitCategory,
-    openDialog,
-    nameRef,
-    handleImageChange,
-  } = useCategoryAction();
+  const { isPending, handleSubmitCategory } = useCategoryAction();
 
   return (
     <Dialog
-      open={openDialog}
-      onOpenChange={(bool) => handleOpenDialog({ bool })}
+      open={state.dialog_open}
+      onOpenChange={(value) => {
+        if (!value) {
+          dispatch({ type: "UPDATE_FEILD", field: "id", value: undefined });
+          dispatch({ type: "UPDATE_FEILD", field: "name", value: undefined });
+        }
+        dispatch({ type: "TOGGLE_DIALOG", value });
+      }}
     >
       <button
-        onClick={() => handleOpenDialog({ bool: true })}
+        onClick={() => dispatch({ type: "TOGGLE_DIALOG", value: true })}
         className="flex flex-col items-center gap-2 group min-w-17.5 cursor-pointer"
       >
         <div className="h-16 w-16 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-orange-400 hover:bg-orange-50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
@@ -55,7 +64,7 @@ export default function AddCategoryDialog() {
               </div>
               <div>
                 <DialogTitle className="text-lg font-bold text-gray-800">
-                  Kategoriya qo'shish
+                  Kategoriya {state.id ? "yangilash" : "qo'shish"}
                 </DialogTitle>
               </div>
             </div>
@@ -63,7 +72,13 @@ export default function AddCategoryDialog() {
         </div>
 
         <form
-          onSubmit={(e) => handleSubmitCategory(e)}
+          onSubmit={(e) =>
+            handleSubmitCategory(e, {
+              id: state.id,
+              name: state.name,
+              image: state.image,
+            })
+          }
           className="p-6 space-y-5"
         >
           {/* Name input */}
@@ -74,10 +89,18 @@ export default function AddCategoryDialog() {
             <div className="relative">
               <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
-                ref={nameRef}
                 id="name"
+                value={state.name}
                 placeholder="Masalan: Telefonlar"
                 className="pl-10 h-10 rounded-md border-gray-300 focus:border-orange-500"
+                required={!state.id}
+                onChange={(e) =>
+                  dispatch({
+                    type: "UPDATE_FEILD",
+                    field: "name",
+                    value: e.target.value,
+                  })
+                }
               />
             </div>
           </div>
@@ -127,10 +150,15 @@ export default function AddCategoryDialog() {
                   type="file"
                   accept="image/*"
                   className="hidden"
+                  required={!state.id}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      handleImageChange(file);
+                      dispatch({
+                        type: "UPDATE_FEILD",
+                        field: "image",
+                        value: file,
+                      });
                       const reader = new FileReader();
                       reader.onloadend = () => {
                         setPreviewImage(reader.result as string);

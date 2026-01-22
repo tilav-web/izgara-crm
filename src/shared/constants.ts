@@ -13,6 +13,6 @@ export const API_ENDPOINTS = {
     CATEGORY: {
         findALl: "/products/get_all_category/",
         create: "/products/add_category/",
-        update: (id: number) => `/products/update_category/${id}`
+        update: (id: number) => `/products/update_category/${id}/`
     }
 }

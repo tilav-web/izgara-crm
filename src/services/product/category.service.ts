@@ -11,7 +11,7 @@ class CategoryService extends BaseService {
     return this.POST<ICategory>(API_ENDPOINTS.CATEGORY.create, body)
   }
 
-  async update(id: number, body: FormData) {
+  async update(id: number, body: FormData | { name?: string }) {
     return this.PATCH<ICategory>(API_ENDPOINTS.CATEGORY.update(id), body)
   }
 }
