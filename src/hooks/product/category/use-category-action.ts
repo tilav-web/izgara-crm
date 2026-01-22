@@ -3,22 +3,38 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent } from "react";
 import { toast } from "sonner";
 
+type MutationBody = FormData | { name?: string };
+
 export default function useCategoryAction() {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation({
-        mutationFn: async ({ id, body }: { id?: number; body: FormData | { name?: string } }) => {
+    const saveMutation = useMutation({
+        mutationFn: async ({ id, body }: { id?: number; body: MutationBody }) => {
             if (id) {
-                return categoryService.update(id, body)
+                return categoryService.update(id, body);
             }
-            return categoryService.create(body as FormData)
+            return categoryService.create(body as FormData);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['categories'] });
-            toast.success('Kategoriya yaratildi!');
+            toast.success('Muvaffaqiyatli saqlandi!');
         },
         onError: (error) => {
-            toast.error('Kategoriya yaratishda xatolik!');
+            toast.error('Saqlashda xatolik bo\'ldi!');
+            console.error(error);
+        }
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: async (id: number) => {
+            return categoryService.delete(id);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['categories'] });
+            toast.success('Kategoriya o\'chirildi!');
+        },
+        onError: (error) => {
+            toast.error('O\'chirishda xatolik bo\'ldi!');
             console.error(error);
         }
     });
@@ -26,43 +42,44 @@ export default function useCategoryAction() {
     const handleSubmitCategory = (e: FormEvent, { id, name, image }: { id?: number; name?: string; image?: File }) => {
         e.preventDefault();
 
-        if (!id) {
-            if (!name || !image) {
-                toast.error('Yaratish uchun nom va rasm kiritilishi shart!');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('image', image);
-
-            mutation.mutate({ body: formData });
+        // Validation...
+        if (!id && (!name || !image)) {
+            toast.error('Yaratish uchun nom va rasm shart!');
+            return;
+        }
+        if (id && !name && !image) {
+            toast.error('O\'zgarish yo\'q!');
             return;
         }
 
-        if (!name && !image) {
-            toast.error('Yangilash uchun kamida bitta ma\'lumot kiriting (nom yoki rasm)!');
-            return;
-        }
+        // Body tayyorlash
+        let body: MutationBody;
 
         if (image) {
             const formData = new FormData();
             formData.append('image', image);
             if (name) formData.append('name', name);
-
-            mutation.mutate({ id, body: formData });
-        }
-        else {
-            const payload = { name };
-            mutation.mutate({ id, body: payload });
+            body = formData;
+        } else {
+            body = { name };
         }
 
+        // Save mutationni chaqirish
+        saveMutation.mutate({ id, body });
     };
+
+    const handleDeleteCategory = (id?: number) => {
+        if (!id) {
+            toast.error('Kategoriya topilmadi!')
+            return
+        }
+        deleteMutation.mutate(id);
+    }
 
     return {
         handleSubmitCategory,
-        isPending: mutation.isPending,
-        isError: mutation.isError,
-        error: mutation.error,
+        handleDeleteCategory,
+        isSavePending: saveMutation.isPending,
+        isDeletePending: deleteMutation.isPending,
     };
 }

@@ -14,6 +14,10 @@ class CategoryService extends BaseService {
   async update(id: number, body: FormData | { name?: string }) {
     return this.PATCH<ICategory>(API_ENDPOINTS.CATEGORY.update(id), body)
   }
+
+  async delete(id: number) {
+    return this.DELETE(API_ENDPOINTS.CATEGORY.delete(id))
+  }
 }
 
 export const categoryService = new CategoryService()

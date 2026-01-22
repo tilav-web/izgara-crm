@@ -73,7 +73,11 @@ export default function CategoryItem({
       <ContextMenuContent>
         <ContextMenuItem
           onClick={() => {
-            dispatch({ type: "TOGGLE_DIALOG", value: true });
+            dispatch({
+              type: "UPDATE_FEILD",
+              field: "dialog_open",
+              value: true,
+            });
             dispatch({ type: "UPDATE_FEILD", field: "id", value: category.id });
             dispatch({
               type: "UPDATE_FEILD",
@@ -85,7 +89,21 @@ export default function CategoryItem({
         >
           Edit <Edit />
         </ContextMenuItem>
-        <ContextMenuItem className="flex items-center justify-between cursor-pointer">
+        <ContextMenuItem
+          onClick={() => {
+            dispatch({
+              type: "UPDATE_FEILD",
+              field: "alert_dialog_open",
+              value: true,
+            });
+            dispatch({
+              type: "UPDATE_FEILD",
+              field: "id",
+              value: category.id,
+            });
+          }}
+          className="flex items-center justify-between cursor-pointer"
+        >
           Delete <Trash />
         </ContextMenuItem>
       </ContextMenuContent>

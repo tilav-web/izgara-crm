@@ -25,7 +25,7 @@ export default function CategoryFormDialog({
   dispatch: Dispatch<CategoryFormAction>;
 }) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const { isPending, handleSubmitCategory } = useCategoryAction();
+  const { handleSubmitCategory, isSavePending } = useCategoryAction();
 
   return (
     <Dialog
@@ -35,11 +35,13 @@ export default function CategoryFormDialog({
           dispatch({ type: "UPDATE_FEILD", field: "id", value: undefined });
           dispatch({ type: "UPDATE_FEILD", field: "name", value: undefined });
         }
-        dispatch({ type: "TOGGLE_DIALOG", value });
+        dispatch({ type: "UPDATE_FEILD", field: "dialog_open", value });
       }}
     >
       <button
-        onClick={() => dispatch({ type: "TOGGLE_DIALOG", value: true })}
+        onClick={() =>
+          dispatch({ type: "UPDATE_FEILD", field: "dialog_open", value: true })
+        }
         className="flex flex-col items-center gap-2 group min-w-17.5 cursor-pointer"
       >
         <div className="h-16 w-16 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-orange-400 hover:bg-orange-50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
@@ -186,7 +188,7 @@ export default function CategoryFormDialog({
               type="submit"
               className="h-9 px-6 bg-orange-500 hover:bg-orange-600 text-white font-medium"
             >
-              {isPending && <Spinner />}
+              {isSavePending && <Spinner />}
               Saqlash
             </Button>
           </div>

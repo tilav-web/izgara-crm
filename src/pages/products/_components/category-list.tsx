@@ -9,6 +9,7 @@ import {
   CategoryFormInitialState,
   categoryFormReducer,
 } from "@/reducers/products/category.reducer";
+import DeleteAlertDialog from "./delete-alert-dialog";
 
 export default function CategoryList() {
   const { data: categories, isLoading, error } = useFindAllCategory();
@@ -18,7 +19,6 @@ export default function CategoryList() {
     CategoryFormInitialState,
   );
 
-  // URL dan hozirgi kategoriya ID sini olamiz
   const activeCategoryId = searchParams.get("category");
 
   // Loading Skeleton
@@ -90,7 +90,12 @@ export default function CategoryList() {
           />
         );
       })}
+
+      {/* Form dialog */}
       <CategoryFormDialog state={categoryState} dispatch={categoryDispatch} />
+
+      {/* Delete Alert Dialog */}
+      <DeleteAlertDialog state={categoryState} dispatch={categoryDispatch} />
     </div>
   );
 }
