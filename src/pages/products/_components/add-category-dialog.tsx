@@ -8,32 +8,42 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useCreateCategory from "@/hooks/product/category/use-create-category";
+import { Spinner } from "@/components/ui/spinner";
+import useCategoryAction from "@/hooks/product/category/use-category-action";
 import { Upload, X, Tag, Image as ImageIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function AddCategoryDialog() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
-  const [image, setImage] = useState<File | undefined>(undefined);
-  const { createCategory, isPending } = useCreateCategory();
+  const {
+    handleOpenDialog,
+    isPending,
+    handleSubmitCategory,
+    openDialog,
+    nameRef,
+    handleImageChange,
+  } = useCategoryAction();
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="flex flex-col items-center gap-2 group min-w-17.5 cursor-pointer">
-          <div className="h-16 w-16 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-orange-400 hover:bg-orange-50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
-            <div className="flex items-center justify-center h-10 w-10 bg-gray-100 rounded-full group-hover:bg-orange-100 transition-colors duration-300">
-              <span className="text-2xl font-bold text-gray-500 group-hover:text-orange-500 group-hover:scale-110 transition-all duration-300">
-                +
-              </span>
-            </div>
+    <Dialog
+      open={openDialog}
+      onOpenChange={(bool) => handleOpenDialog({ bool })}
+    >
+      <button
+        onClick={() => handleOpenDialog({ bool: true })}
+        className="flex flex-col items-center gap-2 group min-w-17.5 cursor-pointer"
+      >
+        <div className="h-16 w-16 rounded-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-orange-400 hover:bg-orange-50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
+          <div className="flex items-center justify-center h-10 w-10 bg-gray-100 rounded-full group-hover:bg-orange-100 transition-colors duration-300">
+            <span className="text-2xl font-bold text-gray-500 group-hover:text-orange-500 group-hover:scale-110 transition-all duration-300">
+              +
+            </span>
           </div>
-          <span className="text-xs font-medium text-center text-gray-600 group-hover:text-orange-500 transition-colors duration-300">
-            Yangi qo'shish
-          </span>
-        </button>
-      </DialogTrigger>
+        </div>
+        <span className="text-xs font-medium text-center text-gray-600 group-hover:text-orange-500 transition-colors duration-300">
+          Yangi qo'shish
+        </span>
+      </button>
 
       <DialogContent className="sm:max-w-md bg-white p-0 overflow-hidden rounded-xl shadow-xl">
         {/* Header with gradient */}
@@ -53,12 +63,7 @@ export default function AddCategoryDialog() {
         </div>
 
         <form
-          onSubmit={(e) =>
-            createCategory(e, {
-              name: nameRef.current?.value,
-              image,
-            })
-          }
+          onSubmit={(e) => handleSubmitCategory(e)}
           className="p-6 space-y-5"
         >
           {/* Name input */}
@@ -125,7 +130,7 @@ export default function AddCategoryDialog() {
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      setImage(file);
+                      handleImageChange(file);
                       const reader = new FileReader();
                       reader.onloadend = () => {
                         setPreviewImage(reader.result as string);
@@ -153,6 +158,7 @@ export default function AddCategoryDialog() {
               type="submit"
               className="h-9 px-6 bg-orange-500 hover:bg-orange-600 text-white font-medium"
             >
+              {isPending && <Spinner />}
               Saqlash
             </Button>
           </div>

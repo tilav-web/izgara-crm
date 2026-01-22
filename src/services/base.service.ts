@@ -19,8 +19,8 @@ export class BaseService {
     }
 
     //PUT
-    protected async PUT<T>(url: string, body: any): Promise<T> {
-        return this.api.put(url, body) as Promise<T>
+    protected async PATCH<T>(url: string, body: any): Promise<T> {
+        return this.api.patch(url, body) as Promise<T>
     }
 
     protected async DELETE<T>(url: string): Promise<T> {

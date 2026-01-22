@@ -10,6 +10,10 @@ class CategoryService extends BaseService {
   async create(body: FormData) {
     return this.POST<ICategory>(API_ENDPOINTS.CATEGORY.create, body)
   }
+
+  async update(id: number, body: FormData) {
+    return this.PATCH<ICategory>(API_ENDPOINTS.CATEGORY.update(id), body)
+  }
 }
 
 export const categoryService = new CategoryService()

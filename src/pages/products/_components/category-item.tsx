@@ -4,6 +4,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import useCategoryAction from "@/hooks/product/category/use-category-action";
 import type { ICategory } from "@/interfaces/product/category.interface";
 import { cn } from "@/lib/utils";
 import { baseURL } from "@/shared/constants";
@@ -14,6 +15,7 @@ export default function CategoryItem({ category }: { category: ICategory }) {
   const [searchParams] = useSearchParams();
   const activeCategoryId = searchParams.get("category");
   const isActive = activeCategoryId === String(category.id);
+  const { handleOpenDialog } = useCategoryAction();
 
   return (
     <ContextMenu>
@@ -63,7 +65,10 @@ export default function CategoryItem({ category }: { category: ICategory }) {
         </Link>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem className="flex items-center justify-between cursor-pointer">
+        <ContextMenuItem
+          onClick={() => handleOpenDialog({ bool: true, id: category.id })}
+          className="flex items-center justify-between cursor-pointer"
+        >
           Edit <Edit />
         </ContextMenuItem>
         <ContextMenuItem className="flex items-center justify-between cursor-pointer">
