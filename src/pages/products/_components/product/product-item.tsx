@@ -1,7 +1,6 @@
 import type { ICategory } from "@/interfaces/product/category.interface";
 import type { IProduct } from "@/interfaces/product/product.interface";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Edit, Trash2, ShoppingCart, Tag } from "lucide-react";
 
@@ -33,28 +32,6 @@ export default function ProductItem({
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700 group">
-      {/* Sotuvdagi chegirma badge */}
-      {product.discount > 0 && (
-        <div className="absolute top-3 left-3 z-10">
-          <Badge className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 font-bold">
-            -{product.discount}%
-          </Badge>
-        </div>
-      )}
-
-      {/* Stock holati */}
-      <div className="absolute top-3 right-3 z-10">
-        {product.is_stock ? (
-          <Badge className="bg-green-500 hover:bg-green-600 text-white px-3 py-1">
-            Sotuvda
-          </Badge>
-        ) : (
-          <Badge variant="destructive" className="px-3 py-1">
-            Qolmagan
-          </Badge>
-        )}
-      </div>
-
       {/* Mahsulot rasmi */}
       <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800">
         {product.image ? (
@@ -71,8 +48,8 @@ export default function ProductItem({
           </div>
         )}
         
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* liner overlay */}
+        <div className="absolute inset-0 bg-liner-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* Kategoriya nomi */}
@@ -96,7 +73,7 @@ export default function ProductItem({
           {product.name}
         </h3>
         
-        <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 line-clamp-2 min-h-[40px]">
+        <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 line-clamp-2 min-h-10">
           {product.description}
         </p>
 
@@ -123,16 +100,6 @@ export default function ProductItem({
               </span>
             </div>
           )}
-
-          {/* QQS */}
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
-            <span className="text-sm text-slate-500 dark:text-slate-400">
-              QQS {product.vat}%
-            </span>
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              {formatPrice(product.final_price * product.vat / 100)}
-            </span>
-          </div>
 
           {/* Tejamkorlik */}
           {product.discount > 0 && (
@@ -168,13 +135,6 @@ export default function ProductItem({
           <span>O'chirish</span>
         </Button>
       </CardFooter>
-
-      {/* ID ko'rsatish */}
-      <div className="absolute bottom-3 right-3">
-        <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
-          ID: {product.id}
-        </span>
-      </div>
     </Card>
   );
 }
