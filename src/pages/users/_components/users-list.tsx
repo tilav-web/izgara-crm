@@ -16,7 +16,7 @@ export default function UsersList() {
 
   if (isLoading) {
     return (
-      <div className="rounded-md border">
+      <div className="rounded-md border mx-12 mt-12">
         <Table>
           <TableHeader>
             <TableRow>
@@ -58,7 +58,7 @@ export default function UsersList() {
   }
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border mx-12 mt-12">
       <Table>
         <TableHeader>
           <TableRow>
