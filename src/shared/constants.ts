@@ -18,6 +18,9 @@ export const API_ENDPOINTS = {
     },
     PRODUCTS: {
         findAll: "/products/get_all_product/"
+    },
+    USERS: {
+        findAll: "/accounts/get_all_user/"
     }
 }
 

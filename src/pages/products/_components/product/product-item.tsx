@@ -1,8 +1,14 @@
 import type { ICategory } from "@/interfaces/product/category.interface";
 import type { IProduct } from "@/interfaces/product/product.interface";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Edit, Trash2, ShoppingCart, Tag } from "lucide-react";
+import { baseURL } from "@/shared/constants";
 
 export default function ProductItem({
   product,
@@ -22,9 +28,9 @@ export default function ProductItem({
 
   // Narxni formatlash
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('uz-UZ', {
-      style: 'currency',
-      currency: 'UZS',
+    return new Intl.NumberFormat("uz-UZ", {
+      style: "currency",
+      currency: "UZS",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
@@ -36,7 +42,7 @@ export default function ProductItem({
       <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800">
         {product.image ? (
           <img
-            src={product.image}
+            src={`${baseURL}${product.image}`}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
@@ -47,7 +53,7 @@ export default function ProductItem({
             </div>
           </div>
         )}
-        
+
         {/* liner overlay */}
         <div className="absolute inset-0 bg-liner-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
@@ -61,9 +67,11 @@ export default function ProductItem({
               {category.name}
             </span>
           </div>
-          
+
           {/* Aktivlik statusi */}
-          <div className={`h-2 w-2 rounded-full ${product.is_active ? 'bg-green-500' : 'bg-slate-300'}`} />
+          <div
+            className={`h-2 w-2 rounded-full ${product.is_active ? "bg-green-500" : "bg-slate-300"}`}
+          />
         </div>
       </CardHeader>
 
@@ -72,7 +80,7 @@ export default function ProductItem({
         <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-2 line-clamp-1">
           {product.name}
         </h3>
-        
+
         <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 line-clamp-2 min-h-10">
           {product.description}
         </p>
@@ -84,7 +92,9 @@ export default function ProductItem({
             <span className="text-sm text-slate-500 dark:text-slate-400">
               Asl narx
             </span>
-            <span className={`text-sm ${product.discount > 0 ? 'line-through text-slate-400 dark:text-slate-500' : 'font-medium text-slate-700 dark:text-slate-300'}`}>
+            <span
+              className={`text-sm ${product.discount > 0 ? "line-through text-slate-400 dark:text-slate-500" : "font-medium text-slate-700 dark:text-slate-300"}`}
+            >
               {formatPrice(product.base_price)}
             </span>
           </div>
@@ -125,7 +135,7 @@ export default function ProductItem({
           <Edit className="h-4 w-4" />
           <span>Tahrirlash</span>
         </Button>
-        
+
         <Button
           variant="outline"
           className="flex-1 gap-2 border-slate-300 dark:border-slate-600 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-300 dark:hover:border-red-700 transition-all text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
