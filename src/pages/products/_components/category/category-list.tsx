@@ -12,7 +12,7 @@ import {
 import DeleteAlertDialog from "./delete-alert-dialog";
 
 export default function CategoryList() {
-  const { data: categories, isLoading, error } = useFindAllCategory();
+  const { categories, isLoading, error } = useFindAllCategory();
   const [searchParams] = useSearchParams();
   const [categoryState, categoryDispatch] = useReducer(
     categoryFormReducer,

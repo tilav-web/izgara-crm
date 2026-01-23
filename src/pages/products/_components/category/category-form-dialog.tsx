@@ -187,6 +187,7 @@ export default function CategoryFormDialog({
             <Button
               type="submit"
               className="h-9 px-6 bg-orange-500 hover:bg-orange-600 text-white font-medium"
+              disabled={isSavePending}
             >
               {isSavePending && <Spinner />}
               Saqlash

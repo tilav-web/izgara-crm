@@ -15,6 +15,9 @@ export const API_ENDPOINTS = {
         create: "/products/add_category/",
         update: (id: number) => `/products/update_category/${id}/`,
         delete: (id: number) => `/products/delete_category/${id}/`
+    },
+    PRODUCTS: {
+        findAll: "/products/get_all_product/"
     }
 }
 
